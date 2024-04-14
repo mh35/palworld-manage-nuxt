@@ -27,11 +27,11 @@ export interface PlayerInfo {
   /**
    * The player ID
    */
-  playerid: string;
+  playerId: string;
   /**
    * The user ID
    */
-  userid: string;
+  userId: string;
   /**
    * The player IP address
    */
@@ -289,4 +289,8 @@ export interface ServerSettings {
    * Log format type
    */
   LogFormatType: 'Text' | 'Json';
+}
+
+export interface AnnounceInput {
+  message: string;
 }
