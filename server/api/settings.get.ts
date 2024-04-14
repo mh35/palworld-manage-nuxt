@@ -1,6 +1,6 @@
 import { Axios, isAxiosError } from 'axios'
 
-import { PlayerInfo } from '~/types/api'
+import { ServerSettings } from '~/types/api'
 
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig()
@@ -19,11 +19,11 @@ export default defineEventHandler(async (event) => {
     }]
   })
   try {
-    const res = await cl.get<{players: PlayerInfo[]}>(
-      config.apiBase + '/v1/api/players')
+    const res = await cl.get<ServerSettings>(
+      config.apiBase + '/v1/api/settings')
     return {
       status: 'success',
-      players: res.data.players
+      settings: res.data
     }
   } catch (e) {
     if (isAxiosError(e)) {
