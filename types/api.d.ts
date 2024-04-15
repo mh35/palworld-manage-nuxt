@@ -294,3 +294,7 @@ export interface ServerSettings {
 export interface AnnounceInput {
   message: string;
 }
+
+export interface KickBanInput {
+  message: string;
+}

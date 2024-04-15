@@ -1,29 +1,38 @@
 import { Axios, isAxiosError } from 'axios'
 
-import { PlayerInfo } from '~/types/api'
+import { KickBanInput } from '~/types/api'
 
 export default defineEventHandler(async (event) => {
+  const playerId = event.context.params?.player_id
+  if (!playerId) {
+    setResponseStatus(event, 400)
+    return {
+      status: 'params-error',
+    }
+  }
+  if (!('message' in event)) {
+    setResponseStatus(event, 400)
+    return {
+      status: 'params-error',
+    }
+  }
+  const body = await readBody(event) as KickBanInput
   const config = useRuntimeConfig()
   const cl = new Axios({
     auth: {
       username: 'admin',
       password: config.apiPassword
     },
-    responseType: 'json',
+    responseType: 'text',
     responseEncoding: 'utf-8',
-    transformResponse: [(data) => {
-      if (typeof data === 'string') {
-        return JSON.parse(data.replace("\t", " "))
-      }
-      return data
-    }]
   })
   try {
-    const res = await cl.get<{players: PlayerInfo[]}>(
-      config.apiBase + '/v1/api/players')
+    await cl.post(config.apiBase + '/v1/api/ban', {
+      userid: playerId,
+      message: body.message
+    })
     return {
-      status: 'success',
-      players: res.data.players
+      status: 'success'
     }
   } catch (e) {
     if (isAxiosError(e)) {
@@ -42,7 +51,7 @@ export default defineEventHandler(async (event) => {
     } else {
       setResponseStatus(event, 500)
       return {
-        status: 'server-error'
+        status: 'server-error',
       }
     }
   }

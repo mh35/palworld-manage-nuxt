@@ -28,16 +28,19 @@ export default defineEventHandler(async (event) => {
   } catch (e) {
     if (isAxiosError(e)) {
       if (e.response) {
+        setResponseStatus(event, 500)
         return {
           status: 'error',
           code: e.response.status
         }
       } else {
+        setResponseStatus(event, 503)
         return {
           status: 'server-down'
         }
       }
     } else {
+      setResponseStatus(event, 500)
       return {
         status: 'server-error',
       }
