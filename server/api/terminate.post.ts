@@ -1,15 +1,6 @@
 import { Axios, isAxiosError } from 'axios'
 
-import { AnnounceInput } from '~/types/api'
-
 export default defineEventHandler(async (event) => {
-  if (!('message' in event)) {
-    setResponseStatus(event, 400)
-    return {
-      status: 'params-error',
-    }
-  }
-  const body = await readBody(event) as AnnounceInput
   const config = useRuntimeConfig()
   const cl = new Axios({
     auth: {
@@ -20,9 +11,7 @@ export default defineEventHandler(async (event) => {
     responseEncoding: 'utf-8',
   })
   try {
-    await cl.post(config.apiBase + '/v1/api/announce', {
-      message: body.message
-    })
+    await cl.post(config.apiBase + '/v1/api/stop')
     return {
       status: 'success'
     }

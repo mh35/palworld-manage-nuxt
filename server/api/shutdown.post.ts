@@ -20,7 +20,7 @@ export default defineEventHandler(async (event) => {
     responseEncoding: 'utf-8',
   })
   try {
-    await cl.post(config.apiBase + '/v1/api/announce', {
+    await cl.post(config.apiBase + '/v1/api/shutdown', {
       message: body.message
     })
     return {
